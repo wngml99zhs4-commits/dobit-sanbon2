@@ -624,3 +624,103 @@ html.pf-open,html.pf-open body{overflow:hidden}
   .pf-others-h,.pf-others,.pf-about{display:none}
   .pf-actions{position:fixed;left:0;right:0;bottom:0;z-index:3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--line-soft)}
 }
+
+/* ===== 인재채용 페이지 (#dv-recruit 안에서만 적용) ===== */
+#dv-recruit{
+  --r-bg:#f6f2ed;--r-card:#fcfaf7;--r-line:#e8e0d6;--r-ink:#3a302a;--r-soft:#7a6e65;
+  --r-accent:#9a7558;--r-accent-dark:#8b6a4f;
+  display:block;background:var(--r-bg);color:var(--r-ink);overflow-x:hidden;
+  font-family:"Noto Sans KR","Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+#dv-recruit *{box-sizing:border-box}
+#dv-recruit h1,#dv-recruit h2,#dv-recruit h3{color:var(--r-ink);letter-spacing:.03em;font-weight:700}
+#dv-recruit .dvr-wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+#dv-recruit .dvr-sec{padding:56px 0}
+#dv-recruit .dvr-alt{background:var(--r-card);border-top:1px solid var(--r-line);border-bottom:1px solid var(--r-line)}
+#dv-recruit .dvr-label{font-size:12px;letter-spacing:.32em;font-weight:700;color:var(--r-accent-dark)}
+#dv-recruit .dvr-head{text-align:center;margin-bottom:30px}
+#dv-recruit .dvr-head h2{font-size:clamp(22px,5vw,30px);margin-top:8px;line-height:1.4}
+#dv-recruit .dvr-head p{color:var(--r-soft);font-size:15px;margin-top:8px}
+
+#dv-recruit .dvr-hero{text-align:center;padding:60px 16px 44px;border-bottom:1px solid var(--r-line)}
+#dv-recruit .dvr-hero h1{font-size:clamp(24px,5.5vw,36px);margin-top:10px;line-height:1.4}
+#dv-recruit .dvr-hero p{color:var(--r-soft);font-size:15px;margin:14px auto 0;max-width:600px}
+#dv-recruit .dvr-crumb{margin-top:18px;font-size:13px;color:var(--r-soft)}
+#dv-recruit .dvr-crumb a{color:var(--r-accent-dark)}
+#dv-recruit .dvr-crumb .sep{margin:0 8px;color:var(--r-line)}
+
+#dv-recruit .dvr-grid{display:grid;gap:14px;grid-template-columns:1fr;list-style:none;margin:0;padding:0}
+@media(min-width:720px){
+  #dv-recruit .dvr-grid-3{grid-template-columns:repeat(3,1fr)}
+  #dv-recruit .dvr-grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:960px){
+  #dv-recruit .dvr-sec{padding:80px 0}
+  #dv-recruit .dvr-grid-4{grid-template-columns:repeat(4,1fr)}
+}
+#dv-recruit .dvr-card{background:var(--r-card);border:1px solid var(--r-line);border-radius:0;box-shadow:none;padding:26px 22px}
+#dv-recruit .dvr-alt .dvr-card{background:var(--r-bg)}
+#dv-recruit .dvr-card h3{font-size:17px;line-height:1.45}
+#dv-recruit .dvr-card p{font-size:14px;color:var(--r-soft);margin-top:8px}
+#dv-recruit .dvr-num{font-size:26px;font-weight:300;color:var(--r-accent);letter-spacing:.06em;margin-bottom:10px}
+#dv-recruit .dvr-step{font-size:12px;letter-spacing:.22em;font-weight:700;color:var(--r-accent-dark);margin-bottom:8px}
+#dv-recruit .dvr-badge{display:inline-block;font-size:12px;font-weight:600;color:var(--r-accent-dark);border:1px solid var(--r-accent);padding:3px 10px;white-space:nowrap}
+
+#dv-recruit .dvr-hours{max-width:760px;margin:0 auto 22px;border:1px solid var(--r-line);background:var(--r-card);padding:22px}
+#dv-recruit .dvr-hours h3{font-size:16px;margin-bottom:12px}
+#dv-recruit .dvr-hours dl{display:grid;gap:8px;margin:0}
+#dv-recruit .dvr-hours dl>div{display:flex;gap:14px;font-size:14.5px}
+#dv-recruit .dvr-hours dt{width:64px;flex:none;font-weight:700;color:var(--r-accent-dark)}
+#dv-recruit .dvr-hours dd{margin:0}
+#dv-recruit .dvr-hours small{color:var(--r-soft);font-size:13px}
+@media(min-width:720px){#dv-recruit .dvr-hours dl{grid-template-columns:repeat(2,1fr)}}
+
+#dv-recruit .dvr-jobs{max-width:760px;margin:0 auto;display:grid;gap:14px}
+#dv-recruit .dvr-job-top,#dv-recruit .dvr-total-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+#dv-recruit .dvr-job-top h3,#dv-recruit .dvr-total-top h3{font-size:19px}
+
+#dv-recruit .dvr-table{width:100%;border-collapse:collapse;font-size:14.5px;border-top:1px solid var(--r-ink)}
+#dv-recruit .dvr-table th,#dv-recruit .dvr-table td{padding:12px 10px;border-bottom:1px solid var(--r-line);text-align:left;vertical-align:top}
+#dv-recruit .dvr-table tbody th{font-weight:600;color:var(--r-ink)}
+#dv-recruit .dvr-job .dvr-table td{text-align:right;font-weight:700;color:var(--r-accent-dark);white-space:nowrap}
+#dv-recruit .dvr-table thead th{font-size:13px;color:var(--r-soft);font-weight:600}
+
+#dv-recruit .dvr-notes{list-style:none;margin:14px 0 0;padding:0}
+#dv-recruit .dvr-notes li{position:relative;padding-left:14px;font-size:14px;color:var(--r-soft);margin-bottom:5px}
+#dv-recruit .dvr-notes li::before{content:"";position:absolute;left:2px;top:.72em;width:4px;height:4px;background:var(--r-accent)}
+
+#dv-recruit .dvr-total{max-width:760px;margin:0 auto 18px}
+#dv-recruit .dvr-edu{max-width:760px;margin:0 auto;background:var(--r-bg)}
+#dv-recruit .dvr-edu tbody th{white-space:nowrap;color:var(--r-accent-dark)}
+#dv-recruit .dvr-edu td:nth-child(2){white-space:nowrap}
+@media(max-width:599px){
+  #dv-recruit .dvr-edu thead{display:none}
+  #dv-recruit .dvr-edu tr{display:block;padding:12px 0;border-bottom:1px solid var(--r-line)}
+  #dv-recruit .dvr-edu th,#dv-recruit .dvr-edu td{display:inline;border:0;padding:0}
+  #dv-recruit .dvr-edu td:nth-child(2){margin-left:8px;color:var(--r-soft);font-size:13px}
+  #dv-recruit .dvr-edu td:last-child{display:block;margin-top:4px}
+}
+
+#dv-recruit .dvr-photos{max-width:760px;margin:22px auto 0;display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:720px){#dv-recruit .dvr-photos{grid-template-columns:repeat(4,1fr)}}
+#dv-recruit .dvr-photo-slot{aspect-ratio:4/3;border:1px dashed var(--r-line);background:var(--r-card);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--r-soft)}
+#dv-recruit .dvr-photos img,#dv-recruit .dvr-team img{width:100%;aspect-ratio:4/3;object-fit:cover}
+#dv-recruit .dvr-team{padding:0 0 22px}
+#dv-recruit .dvr-team .dvr-photo-slot{border:0;border-bottom:1px solid var(--r-line);background:var(--r-bg)}
+#dv-recruit .dvr-team h3,#dv-recruit .dvr-team p{padding:0 20px}
+#dv-recruit .dvr-team h3{margin-top:18px}
+
+#dv-recruit .dvr-benefits{max-width:760px;margin:0 auto;list-style:none;padding:0;display:grid;gap:0 28px;grid-template-columns:1fr}
+@media(min-width:600px){#dv-recruit .dvr-benefits{grid-template-columns:repeat(2,1fr)}}
+#dv-recruit .dvr-benefits li{position:relative;padding:13px 0 13px 20px;border-bottom:1px solid var(--r-line);font-size:15px}
+#dv-recruit .dvr-benefits li::before{content:"";position:absolute;left:3px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--r-accent)}
+
+#dv-recruit .dvr-apply{max-width:760px;margin:0 auto;display:grid;gap:14px}
+@media(min-width:720px){#dv-recruit .dvr-apply{grid-template-columns:1fr 1fr}}
+#dv-recruit .dvr-sms{text-align:center}
+#dv-recruit .dvr-sms-label{font-size:12px;letter-spacing:.16em;font-weight:600;color:var(--r-soft)}
+#dv-recruit .dvr-sms-num{display:block;margin-top:8px;font-size:clamp(24px,6vw,30px);font-weight:800;letter-spacing:.02em;color:var(--r-accent-dark)}
+#dv-recruit .dvr-btn{display:inline-block;margin-top:16px;padding:12px 28px;background:var(--r-accent-dark);color:#fff;font-weight:700;font-size:15px}
+#dv-recruit .dvr-btn:hover{background:var(--r-ink)}
+#dv-recruit .dvr-addr{text-align:center;margin-top:28px;font-size:14px;color:var(--r-soft)}
+#dv-recruit .dvr-addr a{color:var(--r-accent-dark);font-weight:600;border-bottom:1px solid var(--r-accent)}
