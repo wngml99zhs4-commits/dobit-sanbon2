@@ -13,3 +13,6 @@ _기준사이트/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# 네이버 블로그 초안 툴 (로그인 세션·원본 사진 포함 — 절대 공개 금지)
+blog-tool/

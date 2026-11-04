@@ -753,3 +753,17 @@ html.pf-open,html.pf-open body{overflow:hidden}
   #dv-recruit .dvr-team-grid .dvr-team-card h3{font-size:18px;margin-top:14px;padding:0 16px}
   #dv-recruit .dvr-team-grid .dvr-team-card p{font-size:13.5px;padding:0 16px}
 }
+/* 채용 · 매장 소개 */
+#dv-recruit .dvr-about{max-width:960px;margin:0 auto;display:grid;gap:20px}
+#dv-recruit .dvr-about-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}
+#dv-recruit .dvr-about-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+#dv-recruit .dvr-about-text>p{font-size:15px;line-height:1.8}
+#dv-recruit .dvr-facts{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#dv-recruit .dvr-facts li{background:var(--r-bg);border:1px solid var(--r-line);padding:14px 12px;text-align:center}
+#dv-recruit .dvr-facts strong{display:block;font-size:20px;font-weight:700;color:var(--r-accent-dark);letter-spacing:.02em}
+#dv-recruit .dvr-facts span{display:block;margin-top:2px;font-size:12.5px;color:var(--r-soft)}
+@media(min-width:720px){
+  #dv-recruit .dvr-about{grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+}
+#dv-recruit .dvr-about-text>p+p{margin-top:14px}
+#dv-recruit .dvr-about-text strong{color:var(--r-accent-dark);font-weight:700}
