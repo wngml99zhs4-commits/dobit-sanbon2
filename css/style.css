@@ -733,3 +733,23 @@ html.pf-open,html.pf-open body{overflow:hidden}
 #dv-recruit .dvr-feature{max-width:760px;margin:0 auto 18px}
 #dv-recruit .dvr-feature img{width:100%;height:auto;border:1px solid var(--r-line)}
 #dv-recruit .dvr-feature figcaption{margin-top:8px;text-align:center;font-size:13px;color:var(--r-soft)}
+/* 팀 카드 사진 콜라주 (사진 수가 달라도 줄마다 칸을 나눠 빈칸 없이 채움) */
+#dv-recruit .dvr-team-card{padding:0 0 22px;display:flex;flex-direction:column}
+#dv-recruit .dvr-team-card h3{font-size:20px;font-weight:700;margin-top:18px;padding:0 20px}
+#dv-recruit .dvr-team-card p{color:var(--r-soft);padding:0 20px}
+#dv-recruit .dvr-mosaic{aspect-ratio:1/1;display:grid;grid-auto-rows:1fr;gap:3px;background:var(--r-card);overflow:hidden;border-bottom:1px solid var(--r-line)}
+#dv-recruit .dvr-mosaic-row{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;min-height:0}
+#dv-recruit .dvr-mosaic img{width:100%;height:100%;min-height:0;object-fit:cover;display:block}
+#dv-recruit .dvr-mosaic>img{grid-row:1/-1}
+#dv-recruit .dvr-mosaic .dvr-photo-slot{height:100%;aspect-ratio:auto;border:0;background:var(--r-bg)}
+/* 팀 카드 3개: 크기를 줄여 휴대폰에서도 한 줄 */
+#dv-recruit .dvr-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:760px;margin:0 auto}
+#dv-recruit .dvr-team-grid .dvr-team-card{padding-bottom:12px}
+#dv-recruit .dvr-team-grid .dvr-team-card h3{font-size:14px;margin-top:10px;padding:0 8px;letter-spacing:0}
+#dv-recruit .dvr-team-grid .dvr-team-card p{font-size:12px;line-height:1.5;margin-top:4px;padding:0 8px}
+@media(min-width:720px){
+  #dv-recruit .dvr-team-grid{gap:14px}
+  #dv-recruit .dvr-team-grid .dvr-team-card{padding-bottom:18px}
+  #dv-recruit .dvr-team-grid .dvr-team-card h3{font-size:18px;margin-top:14px;padding:0 16px}
+  #dv-recruit .dvr-team-grid .dvr-team-card p{font-size:13.5px;padding:0 16px}
+}
