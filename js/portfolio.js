@@ -7,13 +7,14 @@
   var lang = (document.documentElement.lang || 'ko').slice(0,2);
   var pagePrefix = lang === 'ko' ? '' : lang + '/';
 
+  // 표시 이름: 이름 + 직급 (디자이너 소개 카드와 같은 직급)
   var DESIGNERS = {
-    '유아': {id:'yua', en:'Yua', ja:'ユア', zh:'Yua'},
-    '서지': {id:'seoji', en:'Seoji', ja:'ソジ', zh:'Seoji'},
-    '지원': {id:'jiwon', en:'Jiwon', ja:'ジウォン', zh:'Jiwon'},
-    '윤슬': {id:'yoonseul', en:'Yoonseul', ja:'ユンスル', zh:'Yoonseul'},
-    '아키': {id:'aki', en:'Aki', ja:'アキ', zh:'Aki'},
-    '주희': {id:'juhee', en:'Juhee', ja:'ジュヒ', zh:'Juhee'}
+    '유아': {id:'yua', ko:'유아 부원장', en:'Yua (Vice Director)', ja:'ユア 副院長', zh:'Yua 副院长'},
+    '서지': {id:'seoji', ko:'서지 디자이너', en:'Seoji (Designer)', ja:'ソジ デザイナー', zh:'Seoji 发型师'},
+    '지원': {id:'jiwon', ko:'지원 디자이너', en:'Jiwon (Designer)', ja:'ジウォン デザイナー', zh:'Jiwon 发型师'},
+    '윤슬': {id:'yoonseul', ko:'윤슬 수석팀장', en:'Yoonseul (Head Team Leader)', ja:'ユンスル チーフ', zh:'Yoonseul 首席组长'},
+    '아키': {id:'aki', ko:'아키 부원장', en:'Aki (Vice Director)', ja:'アキ 副院長', zh:'Aki 副院长'},
+    '주희': {id:'juhee', ko:'주희 원장', en:'Juhee (Director)', ja:'ジュヒ 院長', zh:'Juhee 院长'}
   };
 
   var CATEGORIES = {
@@ -46,7 +47,15 @@
     '숏가일': ['Short Guile','ショートガイル','Short Guile'],
     '세미리프': ['Semi Leaf','セミリーフ','Semi Leaf'],
     '슬릭댄디': ['Sleek Dandy','スリークダンディ','Sleek Dandy'],
-    '단발레이어드컷': ['Short Layered Cut','ボブレイヤードカット','短发层次剪']
+    '단발레이어드컷': ['Short Layered Cut','ボブレイヤードカット','短发层次剪'],
+    '윈드펌': ['Wind Perm','ウィンドパーマ','Wind烫'],
+    '레이어드컷': ['Layered Cut','レイヤードカット','层次剪'],
+    '중단발레이어드': ['Medium Layered','ミディアムレイヤード','中长发层次'],
+    '중단발레이어드컷': ['Medium Layered Cut','ミディアムレイヤードカット','中长发层次剪'],
+    '레이어드C컬펌': ['Layered C-Curl Perm','レイヤードCカールパーマ','层次C卷烫'],
+    '디자인컬러': ['Design Color','デザインカラー','设计染发'],
+    '솜브레염색': ['Sombré Color','ソンブレカラー','Sombré染发'],
+    '애쉬핑크': ['Ash Pink','アッシュピンク','灰粉色']
   };
 
   var TEXT = {
