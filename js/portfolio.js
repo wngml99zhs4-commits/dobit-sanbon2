@@ -22,7 +22,6 @@
     '염색': {slug:'color', en:'Color', ja:'カラー', zh:'染发'},
     '클리닉': {slug:'clinic', en:'Clinic', ja:'トリートメント', zh:'护理'}
   };
-  var CATEGORY_ORDER = ['펌','컷','염색','클리닉'];
 
   // 시술명 번역표: 여기에 없는 시술명은 한국어로 표시한다
   var SERVICES = {
@@ -51,13 +50,14 @@
   };
 
   var TEXT = {
-    ko: {view:'시술 사진 보기', all:'전체', title:function(n){return n+' 시술 사진';}, close:'닫기', prev:'이전 사진', next:'다음 사진', open:function(s){return s+' 크게 보기';}},
-    en: {view:'View Portfolio', all:'All', title:function(n){return n+'’s work';}, close:'Close', prev:'Previous photo', next:'Next photo', open:function(s){return 'View '+s;}},
-    ja: {view:'施術写真を見る', all:'すべて', title:function(n){return n+'の施術写真';}, close:'閉じる', prev:'前の写真', next:'次の写真', open:function(s){return s+'を拡大';}},
-    zh: {view:'查看作品', all:'全部', title:function(n){return n+' 的作品';}, close:'关闭', prev:'上一张', next:'下一张', open:function(s){return '查看 '+s;}}
+    ko: {photos:'시술 사진', more:'더보기 ›', title:function(n){return n+' 시술 사진';}, all:'전체', close:'닫기', prev:'이전 사진', next:'다음 사진', open:function(s){return s+' 크게 보기';}},
+    en: {photos:'PORTFOLIO', more:'See all ›', title:function(n){return n+'’s work';}, all:'All', close:'Close', prev:'Previous photo', next:'Next photo', open:function(s){return 'View '+s;}},
+    ja: {photos:'施術写真', more:'すべて見る ›', title:function(n){return n+'の施術写真';}, all:'すべて', close:'閉じる', prev:'前の写真', next:'次の写真', open:function(s){return s+'を拡大';}},
+    zh: {photos:'作品', more:'查看全部 ›', title:function(n){return n+' 的作品';}, all:'全部', close:'关闭', prev:'上一张', next:'下一张', open:function(s){return '查看 '+s;}}
   };
   var T = TEXT[lang] || TEXT.ko;
   var LANG_INDEX = {en:0, ja:1, zh:2};
+  var ROW_MAX = 8;
 
   var photos = (window.PORTFOLIO || []).filter(function(p){
     return p.img && DESIGNERS[p.designer] && p.service && p.cat && p.cat.length;
@@ -73,6 +73,7 @@
   function altText(p){ return designerName(p) + ' - ' + serviceName(p); }
   function designerLink(p){ return siteRoot + pagePrefix + 'designers/#' + DESIGNERS[p.designer].id; }
   function categoryLink(c){ return siteRoot + pagePrefix + CATEGORIES[c].slug + '/'; }
+  function inCat(list, c){ return list.filter(function(p){ return p.cat.indexOf(c) !== -1; }); }
 
   function el(tag, cls, attrs){
     var e = document.createElement(tag);
@@ -83,9 +84,27 @@
 
   function thumb(p, list, i){
     var b = el('button','pfg-thumb',{type:'button','aria-label':T.open(altText(p))});
-    b.appendChild(el('img','',{src:imgSrc(p), alt:altText(p), width:600, height:600, loading:'lazy'}));
+    b.appendChild(el('img','',{src:imgSrc(p), alt:altText(p), width:600, height:750, loading:'lazy', draggable:'false'}));
     b.addEventListener('click', function(){ openView(list, i, b); });
     return b;
+  }
+
+  // 사진 + 시술명 + 카테고리 태그
+  function item(p, list, i){
+    var box = el('div','pfg-item');
+    box.appendChild(thumb(p, list, i));
+    var name = el('div','pfg-name');
+    name.textContent = serviceName(p);
+    box.appendChild(name);
+    var tags = el('div','pfg-tags');
+    p.cat.forEach(function(c){
+      if(!CATEGORIES[c]) return;
+      var a = el('a','pfg-tag',{href:categoryLink(c)});
+      a.textContent = categoryName(c);
+      tags.appendChild(a);
+    });
+    box.appendChild(tags);
+    return box;
   }
 
   // 크게 보기 창 (디자이너 페이지·시술 페이지 공통)
@@ -129,104 +148,125 @@
   function closeView(){
     view.hidden = true;
     big.removeAttribute('src');
-    if(modal.hidden) document.documentElement.classList.remove('pf-open');
+    if(all.hidden) document.documentElement.classList.remove('pf-open');
     if(viewOpener) viewOpener.focus();
   }
 
-  // 디자이너 페이지: 디자이너별 사진 창
-  var modal = el('div','pfg',{hidden:'',role:'dialog','aria-modal':'true','aria-labelledby':'pfgTitle'});
-  var backdrop = el('div','pfg-backdrop');
-  var dialog = el('div','pfg-dialog');
-  var top = el('div','pfg-top');
-  var title = el('h2','pfg-title',{id:'pfgTitle'});
-  var close = el('button','pfg-close',{type:'button','aria-label':T.close});
-  close.textContent = '×';
-  var tabs = el('div','pfg-tabs',{role:'tablist'});
-  var grid = el('div','pfg-grid');
-  top.appendChild(title); top.appendChild(close);
-  dialog.appendChild(top); dialog.appendChild(tabs); dialog.appendChild(grid);
-  modal.appendChild(backdrop); modal.appendChild(dialog);
+  // 디자이너 전체 사진 창 (더보기)
+  var all = el('div','pfa',{hidden:'',role:'dialog','aria-modal':'true','aria-labelledby':'pfaTitle'});
+  var allTop = el('div','pfa-top');
+  var allTitle = el('h2','pfa-title',{id:'pfaTitle'});
+  var allClose = el('button','pfa-close',{type:'button','aria-label':T.close});
+  allClose.textContent = '×';
+  var allBody = el('div','pfa-body');
+  var allGrid = el('div','pfa-grid');
+  allTop.appendChild(allTitle); allTop.appendChild(allClose);
+  allBody.appendChild(allGrid);
+  all.appendChild(allTop); all.appendChild(allBody);
+  var allOpener = null;
 
-  var current = [], currentCat = null, modalOpener = null;
-
-  function inCat(list, c){ return list.filter(function(p){ return p.cat.indexOf(c) !== -1; }); }
-
-  function renderTabs(){
-    tabs.innerHTML = '';
-    CATEGORY_ORDER.forEach(function(c){
-      var n = inCat(current, c).length;
-      if(!n) return;
-      var b = el('button','pfg-tab',{type:'button',role:'tab','aria-selected':String(c===currentCat)});
-      b.textContent = categoryName(c) + ' ' + n;
-      b.addEventListener('click', function(){ currentCat = c; renderTabs(); renderGrid(); });
-      tabs.appendChild(b);
-    });
-  }
-
-  function renderGrid(){
-    grid.innerHTML = '';
-    grid.scrollTop = 0;
-    var list = inCat(current, currentCat);
-    list.forEach(function(p, i){
-      var item = el('div','pfg-item');
-      item.appendChild(thumb(p, list, i));
-      var name = el('div','pfg-name');
-      name.textContent = serviceName(p);
-      item.appendChild(name);
-      var tags = el('div','pfg-tags');
-      p.cat.forEach(function(c){
-        if(!CATEGORIES[c]) return;
-        var a = el('a','pfg-tag',{href:categoryLink(c)});
-        a.textContent = categoryName(c);
-        tags.appendChild(a);
-      });
-      item.appendChild(tags);
-      grid.appendChild(item);
-    });
-  }
-
-  function openModal(list, name, opener){
-    current = list;
-    currentCat = CATEGORY_ORDER.filter(function(c){ return inCat(list,c).length; })[0];
-    modalOpener = opener;
-    title.textContent = T.title(name);
-    renderTabs(); renderGrid();
-    modal.hidden = false;
+  function openAll(list, opener){
+    allOpener = opener;
+    allTitle.textContent = T.title(designerName(list[0]));
+    var n = el('b');
+    n.textContent = list.length;
+    allTitle.appendChild(n);
+    allGrid.innerHTML = '';
+    list.forEach(function(p, i){ allGrid.appendChild(item(p, list, i)); });
+    allBody.scrollTop = 0;
+    all.hidden = false;
     document.documentElement.classList.add('pf-open');
-    close.focus();
+    allClose.focus();
   }
-  function closeModal(){
-    modal.hidden = true;
+  function closeAll(){
+    all.hidden = true;
     document.documentElement.classList.remove('pf-open');
-    if(modalOpener) modalOpener.focus();
+    if(allOpener) allOpener.focus();
   }
 
-  // 디자이너 카드에 버튼 넣기: 사진이 있는 디자이너만
-  var hasCards = false;
+  // 가로 줄: 마우스로 끌어서 넘기기, PC 좌우 화살표
+  function makeRow(row, wrap){
+    var left = el('button','designer-pf-arrow prev',{type:'button','aria-label':T.prev});
+    left.textContent = '‹';
+    var right = el('button','designer-pf-arrow next',{type:'button','aria-label':T.next});
+    right.textContent = '›';
+    wrap.appendChild(left); wrap.appendChild(right);
+
+    function step(){ var f = row.firstElementChild; return f ? f.getBoundingClientRect().width + 8 : row.clientWidth; }
+    function update(){
+      left.hidden = row.scrollLeft <= 2;
+      right.hidden = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+    }
+    left.addEventListener('click', function(){ row.scrollBy({left:-step()*2, behavior:'smooth'}); });
+    right.addEventListener('click', function(){ row.scrollBy({left:step()*2, behavior:'smooth'}); });
+    row.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+    update();
+
+    var drag = null, moved = false;
+    row.addEventListener('pointerdown', function(e){
+      if(e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = {x:e.clientX, left:row.scrollLeft};
+      moved = false;
+    });
+    window.addEventListener('pointermove', function(e){
+      if(!drag) return;
+      var dx = e.clientX - drag.x;
+      if(!moved && Math.abs(dx) > 5){ moved = true; row.classList.add('dragging'); }
+      if(moved) row.scrollLeft = drag.left - dx;
+    });
+    window.addEventListener('pointerup', function(){
+      if(!drag) return;
+      drag = null;
+      row.classList.remove('dragging');
+    });
+    // 끌어서 넘긴 뒤에는 사진이 열리지 않게
+    row.addEventListener('click', function(e){
+      if(moved){ e.stopPropagation(); e.preventDefault(); moved = false; }
+    }, true);
+  }
+
+  // 디자이너 페이지: 소개 아래에 시술 사진 가로 한 줄 (최대 8장) + 더보기
   Object.keys(DESIGNERS).forEach(function(k){
     var card = document.getElementById(DESIGNERS[k].id);
     if(!card || !card.classList.contains('designer-card')) return;
     var list = photos.filter(function(p){ return p.designer === k; });
     if(!list.length) return;
-    hasCards = true;
-    var b = el('button','designer-pf-btn',{type:'button'});
-    b.textContent = T.view;
-    b.addEventListener('click', function(){ openModal(list, designerName(list[0]), b); });
-    var ig = card.querySelector('.designer-ig');
-    ig.parentNode.insertBefore(b, ig);
+
+    var box = el('div','designer-pf');
+    var head = el('div','designer-pf-head');
+    var title = el('div','designer-pf-title');
+    title.textContent = T.photos;
+    var n = el('b');
+    n.textContent = list.length;
+    title.appendChild(n);
+    head.appendChild(title);
+    if(list.length > 1){
+      var more = el('button','designer-pf-more',{type:'button'});
+      more.textContent = T.more;
+      more.addEventListener('click', function(){ openAll(list, more); });
+      head.appendChild(more);
+    }
+    var wrap = el('div','designer-pf-rowwrap');
+    var row = el('div','designer-pf-row');
+    list.slice(0, ROW_MAX).forEach(function(p, i){ row.appendChild(item(p, list, i)); });
+    wrap.appendChild(row);
+    box.appendChild(head);
+    box.appendChild(wrap);
+    card.appendChild(box);
+    makeRow(row, wrap);
   });
 
   // 시술 페이지: 카테고리 갤러리 + 디자이너 필터
-  var galleries = document.querySelectorAll('.pfc');
-  [].forEach.call(galleries, function(box){
+  [].forEach.call(document.querySelectorAll('.pfc'), function(box){
     var cat = box.getAttribute('data-cat');
-    var all = inCat(photos, cat);
-    if(!all.length) return;
+    var list = inCat(photos, cat);
+    if(!list.length) return;
     var section = box.closest('section');
     if(section) section.hidden = false;
 
     var names = [];
-    all.forEach(function(p){ if(names.indexOf(p.designer) === -1) names.push(p.designer); });
+    list.forEach(function(p){ if(names.indexOf(p.designer) === -1) names.push(p.designer); });
 
     var filter = el('div','pfc-filter',{role:'group'});
     var cards = el('div','pfc-grid');
@@ -234,10 +274,10 @@
 
     function render(who){
       cards.innerHTML = '';
-      var list = who ? all.filter(function(p){ return p.designer === who; }) : all;
-      list.forEach(function(p, i){
+      var shown = who ? list.filter(function(p){ return p.designer === who; }) : list;
+      shown.forEach(function(p, i){
         var fig = el('figure','pfc-card');
-        fig.appendChild(thumb(p, list, i));
+        fig.appendChild(thumb(p, shown, i));
         var cap = el('figcaption','pfc-cap');
         cap.appendChild(document.createTextNode(serviceName(p) + ' · '));
         var a = el('a','',{href:designerLink(p)});
@@ -264,11 +304,9 @@
     render(null);
   });
 
-  if(hasCards) document.body.appendChild(modal);
-  if(hasCards || galleries.length) document.body.appendChild(view);
-
-  close.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
+  document.body.appendChild(all);
+  document.body.appendChild(view);
+  allClose.addEventListener('click', closeAll);
   viewClose.addEventListener('click', closeView);
   prev.addEventListener('click', function(){ move(-1); });
   next.addEventListener('click', function(){ move(1); });
@@ -276,9 +314,9 @@
 
   // 키보드: Esc 닫기, 좌우 넘기기, Tab 은 창 안에서만 이동
   document.addEventListener('keydown', function(e){
-    var active = !view.hidden ? view : (!modal.hidden ? modal : null);
+    var active = !view.hidden ? view : (!all.hidden ? all : null);
     if(!active) return;
-    if(e.key === 'Escape'){ if(active === view) closeView(); else closeModal(); return; }
+    if(e.key === 'Escape'){ if(active === view) closeView(); else closeAll(); return; }
     if(active === view && e.key === 'ArrowLeft') move(-1);
     if(active === view && e.key === 'ArrowRight') move(1);
     if(e.key === 'Tab'){
